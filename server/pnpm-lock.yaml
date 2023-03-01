@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   body-parser: ^1.20.2
   cors: ^2.8.5
+  dotenv: ^16.0.3
   express: ^4.18.2
   mongoose: ^7.0.0
   nodemon: ^2.0.20
@@ -10,6 +11,7 @@ specifiers:
 dependencies:
   body-parser: 1.20.2
   cors: 2.8.5
+  dotenv: 16.0.3
   express: 4.18.2
   mongoose: 7.0.0
   nodemon: 2.0.20
@@ -226,6 +228,11 @@ packages:
   /destroy/1.2.0:
     resolution: {integrity: sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==}
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
+    dev: false
+
+  /dotenv/16.0.3:
+    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
+    engines: {node: '>=12'}
     dev: false
 
   /ee-first/1.1.1:
