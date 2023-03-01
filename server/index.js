@@ -8,12 +8,13 @@ import postRoutes from "./routes/posts.js";
 
 const app = express();
 
-// Define the routes
-app.use("/posts", postRoutes);
-
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
+
+// we have to define routes below the cors middleware
+// Define the routes
+app.use("/posts", postRoutes);
 
 const CONNECTION_URL = dbConfig.mongoConntectionString;
 const PORT = process.env.PORT || 5000;
