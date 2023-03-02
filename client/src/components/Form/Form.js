@@ -71,7 +71,7 @@ const Form = ({currentId, setCurrentId}) => {
 				variant="outlined"
 				fullWidth
 				value={postData.tags}
-				onChange={(event) => setPostData({...postData, tags: event.target.value})}
+				onChange={(event) => setPostData({...postData, tags: event.target.value.split(',')})}
 			/>
 			<div className={classes.fileInput}>
 				<FileBase
