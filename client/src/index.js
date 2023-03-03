@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css'
+import {GoogleOAuthProvider} from '@react-oauth/google';
 
 // initialize redux
 import {Provider} from 'react-redux';
@@ -15,7 +16,9 @@ const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 
 ReactDOM.render(
-	<Provider store={store}>
-		<App/>
-	</Provider>
+	<GoogleOAuthProvider clientId={process.env.REACT_APP_OAUTH_CLIENT_ID}>
+		<Provider store={store}>
+			<App/>
+		</Provider>
+	</GoogleOAuthProvider>
 	, document.getElementById('root'));

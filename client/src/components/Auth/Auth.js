@@ -1,13 +1,55 @@
-import React from "react";
-import {Avatar, Button, Paper, Grid, Typography, Container, TextField} from "@material-ui/core";
+import React, {useState} from "react";
+import {Avatar, Button, Paper, Grid, Typography, Container} from "@material-ui/core";
 import useStyles from "./styles";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Input from './Input';
+import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { useDispatch } from "react-redux";
+import jwtDecode from "jwt-decode";
+import { useHistory } from "react-router-dom";
 
 const Auth = () => {
 	const classes = useStyles();
-	const isSignup = false;
+	const [showPassword, setShowPassword] = useState(false);
+	const [isSignup, setIsSignup] = useState(false);
+	const dispatch = useDispatch();
+	const history = useHistory();
 	const handleSubmit = () => {};
 	const handleChange = () => {};
+	
+	const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
+	
+	const switchMode = () => {
+		setIsSignup((prevShowPassword) => !prevShowPassword);
+		setShowPassword(false);
+	};
+	
+	const googleSuccess = async (response) => {
+		const token = response?.credential;
+		const decoded = jwtDecode(token);
+		
+		const result = {
+			email: decoded?.email,
+			familyName: decoded?.family_name,
+			givenName: decoded?.given_name,
+			googleId: decoded?.sub,
+			imageUrl: decoded?.picture,
+			name: decoded?.name,
+		}
+		
+		try {
+			dispatch({ type: 'AUTH', data: { result, token} });
+			setTimeout(() => {
+				history.push('/')
+			}, 1000);
+		} catch (error) {
+			console.log(error)
+		}
+	};
+	
+	const googleError = () => {
+		console.log('Google Sign In was unsuccessful. Try again later');
+	}
 	
 	return (
 		<Container component='main' maxWidth='xs'>
@@ -23,10 +65,29 @@ const Auth = () => {
 						{
 							isSignup && (
 								<React.Fragment>
-									<TextField name="firstName" label="First Name" handleChange={handleChange} autoFocus xs={6} />
+									<Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
+									<Input name="firstName" label="First Name" handleChange={handleChange} half />
 								</React.Fragment>
 							)
 						}
+						<Input name="email" label="Email Address" handleChange={handleChange} type='email' />
+						<Input name="password" label="Password" handleChange={handleChange} type={showPassword ? 'text': 'password'} handleShowPassword={handleShowPassword} />
+						{
+							isSignup && <Input name="confirmPassword" label="Repeat Password" handleChange={handleChange} type='password'  />
+						}
+					</Grid>
+					<GoogleLogin onSuccess={googleSuccess} onError={googleError}  />
+					<Button type="submit" fullWidth variant="contained" color="primary" className={classes.submit}>
+						{
+							isSignup ? 'Sign Up' : 'Sign In'
+						}
+					</Button>
+					<Grid container justifyContent='flex-end'>
+						<Grid item>
+							<Button onClick={switchMode}>{
+								isSignup ? 'Already have an account?' : 'Don\'t have an account?'
+							}</Button>
+						</Grid>
 					</Grid>
 				</form>
 			</Paper>
