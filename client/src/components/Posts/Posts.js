@@ -8,7 +8,7 @@ const Posts = ({ setCurrentId }) => {
 	const classes = useStyles();
 	// state is the all state of the store
 	const posts = useSelector((state) => state.posts);
-	console.log(posts);
+	// console.log(posts);
 	return (
 		!posts.length ? <CircularProgress /> : (
 			<Grid className={classes.container} container alignItems="stretch" spacing={3}>
