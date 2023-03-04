@@ -7,15 +7,36 @@ import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { useDispatch } from "react-redux";
 import jwtDecode from "jwt-decode";
 import { useHistory } from "react-router-dom";
+import { signin, signup } from "../../store/actions/auth";
+
+
+const initialState = {
+firstName: '',
+lastName: '',
+email: '',
+password: '',
+confirmPassword: '',
+};
 
 const Auth = () => {
 	const classes = useStyles();
 	const [showPassword, setShowPassword] = useState(false);
 	const [isSignup, setIsSignup] = useState(false);
+	const [formData, setFormData] = useState(initialState);
 	const dispatch = useDispatch();
 	const history = useHistory();
-	const handleSubmit = () => {};
-	const handleChange = () => {};
+	const handleSubmit = (event) => {
+		event.preventDefault();
+		
+		if(isSignup){
+			dispatch(signup(formData, history))
+		} else {
+			dispatch(signin(formData, history))
+		}
+	};
+	const handleChange = (event) => {
+		setFormData({ ...formData, [event.target.name]: event.target.value });
+	};
 	
 	const handleShowPassword = () => setShowPassword((prevShowPassword) => !prevShowPassword);
 	
@@ -66,7 +87,7 @@ const Auth = () => {
 							isSignup && (
 								<React.Fragment>
 									<Input name="firstName" label="First Name" handleChange={handleChange} autoFocus half />
-									<Input name="firstName" label="First Name" handleChange={handleChange} half />
+									<Input name="lastName" label="Last Name" handleChange={handleChange} half />
 								</React.Fragment>
 							)
 						}

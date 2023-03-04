@@ -8,3 +8,7 @@ export const dbConfig = {
 export const connectionConfig = {
   port: process.env.PORT || 5000,
 };
+
+export const jwtConfig = {
+  secret: process.env.JWT_SECRET,
+};
