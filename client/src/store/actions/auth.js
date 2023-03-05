@@ -4,7 +4,7 @@ import { AUTH } from "../../constants/actionTypes";
 // Action creators: functions that return actions
 export const signin = (formData, history) => async (dispatch) => {
 	try{
-		// log in the user
+		const { data } = await api.signIn(formData);
 		
 		history.push('/');
 	} catch (error) {
