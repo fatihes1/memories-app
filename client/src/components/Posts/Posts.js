@@ -7,13 +7,16 @@ import useStyles from "./styles";
 const Posts = ({ setCurrentId }) => {
 	const classes = useStyles();
 	// state is the all state of the store
-	const posts = useSelector((state) => state.posts);
-	// console.log(posts);
+	const {posts, isLoading} = useSelector((state) => state.posts);
+	// const posts = useSelector((state) => state.posts.posts);
+	
+	if(!posts.length && !isLoading) return 'No posts';
+	
 	return (
-		!posts.length ? <CircularProgress /> : (
+		isLoading ? <CircularProgress /> : (
 			<Grid className={classes.container} container alignItems="stretch" spacing={3}>
 				{posts.map((post) => (
-					<Grid key={post._id} xs={12} sm={6} item>
+					<Grid key={post._id} xs={12} sm={12} md={6} lg={3} item>
 						<Post post={post} setCurrentId={setCurrentId} />
 					</Grid>
 				))}

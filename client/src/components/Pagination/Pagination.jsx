@@ -1,21 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 
-import classes from './styles';
+// import classes from './styles';
 import {Link} from "react-router-dom";
+import useStyles from './styles';
+import { useDispatch, useSelector } from "react-redux";
+import { getPosts } from "../../store/actions/posts";
 
 
-const Paginate = () => {
-	// const classes = useStyles();
+
+const Paginate = ({ page }) => {
+	const { numberOfPages } = useSelector((state) => state.posts);
+	
+	const classes = useStyles();
+	const dispatch = useDispatch();
+	
+	
+	useEffect(() => {
+		if(page) {
+			dispatch(getPosts(page));
+		}
+	}, [page]);
+	
 	
 	return (
 		<Pagination
 			classes={{ ul: classes.ul }}
-			count={5}
-			page={1}
+			count={numberOfPages}
+			page={Number(page) || 1}
 			variant="outlined"
 			color="primary"
-			renderItem={(item) => (<PaginationItem {...item} component={Link} to={`/posts?page=${1}`} />)}
+			renderItem={(item) => (<PaginationItem {...item} component={Link} to={`/posts?page=${item.page}`} />)}
 		/>
 	)
 };
