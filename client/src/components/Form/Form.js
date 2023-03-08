@@ -9,11 +9,11 @@ import { useSelector } from "react-redux";
 const Form = ({currentId, setCurrentId}) => {
 	const classes = useStyles();
 	const [postData, setPostData] = useState({
-		creator: '', title: '', message: '', tags: '', selectedFile: ''
+		title: '', message: '', tags: '', selectedFile: ''
 	});
 	const dispatch = useDispatch();
-	
 	const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+	const user = JSON.parse(localStorage.getItem('profile'))
 	
 	useEffect(() => {
 		if(post) setPostData(post);
@@ -23,9 +23,10 @@ const Form = ({currentId, setCurrentId}) => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 		if (currentId) {
-			dispatch(updatePost(currentId, postData));
+			dispatch(updatePost(currentId, {...postData, name: user?.result?.name}));
+			setCurrentId(null);
 		} else {
-			dispatch(createPost(postData));
+			dispatch(createPost({...postData, name: user?.result?.name}));
 		}
 		clearFormElements();
 	};
@@ -33,22 +34,25 @@ const Form = ({currentId, setCurrentId}) => {
 	const clearFormElements = () => {
 		setCurrentId(null);
 		setPostData({
-			creator: '', title: '', message: '', tags: '', selectedFile: ''
+			title: '', message: '', tags: '', selectedFile: ''
 		});
 	};
+	
+	if(!user?.result?.name) {
+		return (
+			<Paper className={classes.paper}>
+				<Typography variant="h6" align="center">
+					Please Sign In to create your own memories and like other's memories.
+				</Typography>
+			</Paper>
+		)
+	}
 	
 	
 	return (<Paper className={classes.paper}>
 		<form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
 			<Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
-			<TextField
-				name="creator"
-				label="Creator"
-				variant="outlined"
-				fullWidth
-				value={postData.creator}
-				onChange={(event) => setPostData({...postData, creator: event.target.value})}
-			/>
+			
 			<TextField
 				name="title"
 				label="Title"
