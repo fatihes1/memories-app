@@ -5,14 +5,16 @@ import {useDispatch} from "react-redux";
 import useStyles from './styles';
 import {createPost, updatePost} from "../../store/actions/posts";
 import { useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const Form = ({currentId, setCurrentId}) => {
 	const classes = useStyles();
 	const [postData, setPostData] = useState({
 		title: '', message: '', tags: '', selectedFile: ''
 	});
+	const history = useHistory();
 	const dispatch = useDispatch();
-	const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null);
+	const post = useSelector((state) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null);
 	const user = JSON.parse(localStorage.getItem('profile'))
 	
 	useEffect(() => {
@@ -24,9 +26,9 @@ const Form = ({currentId, setCurrentId}) => {
 		event.preventDefault();
 		if (currentId) {
 			dispatch(updatePost(currentId, {...postData, name: user?.result?.name}));
-			setCurrentId(null);
+			clearFormElements();
 		} else {
-			dispatch(createPost({...postData, name: user?.result?.name}));
+			dispatch(createPost({...postData, name: user?.result?.name}, history));
 		}
 		clearFormElements();
 	};

@@ -9,6 +9,7 @@ const Posts = ({ setCurrentId }) => {
 	// state is the all state of the store
 	const {posts, isLoading} = useSelector((state) => state.posts);
 	// const posts = useSelector((state) => state.posts.posts);
+	// console.log(posts);
 	
 	if(!posts.length && !isLoading) return 'No posts';
 	
